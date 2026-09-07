@@ -1,0 +1,8 @@
+# Moat configuration for repository security audits.
+# See https://github.com/laravel/moat
+
+release_branches = ["main", "1.x"]
+
+[checks]
+# Signed commits are recommended but not required for all contributors on this package.
+repositories_commits_are_signed = "off"
