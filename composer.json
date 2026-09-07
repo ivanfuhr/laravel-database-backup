@@ -67,6 +67,7 @@
         "test:unit": "pest --colors=always --parallel --exclude-group=integration",
         "test:integration": "pest --colors=always --group=integration",
         "test:all-tests": "pest --colors=always",
+        "test:coverage": "pest --colors=always --coverage --min=100 --coverage-clover=coverage/clover.xml",
         "test": [
             "@test:refactor",
             "@test:lint",

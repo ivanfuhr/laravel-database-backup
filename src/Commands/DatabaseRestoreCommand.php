@@ -8,7 +8,6 @@ use Illuminate\Console\Command;
 use InvalidArgumentException;
 use IvanFuhr\LaravelDatabaseBackup\BackupManager;
 use IvanFuhr\LaravelDatabaseBackup\Commands\Concerns\InteractsWithCommandInput;
-use IvanFuhr\LaravelDatabaseBackup\Exceptions\BackupFailedException;
 use IvanFuhr\LaravelDatabaseBackup\Exceptions\RestoreFailedException;
 use IvanFuhr\LaravelDatabaseBackup\Support\BackupStorage;
 
@@ -128,7 +127,7 @@ final class DatabaseRestoreCommand extends Command
             @mkdir($tempDir, 0755, true);
         }
 
-        return $tempDir.DIRECTORY_SEPARATOR.getmypid().'-'.$filename;
+        return $tempDir.DIRECTORY_SEPARATOR.getmypid().'-'.uniqid('', true).'-'.$filename;
     }
 
     private function cleanupTemp(string $backupFile, string $input): void
@@ -213,16 +212,10 @@ final class DatabaseRestoreCommand extends Command
             return true;
         }
 
-        try {
-            $result = $this->call('db:backup', [
-                '--connection' => $this->optionalStringOption('connection'),
-                '--strategy' => $this->optionalStringOption('strategy'),
-            ]);
-        } catch (BackupFailedException) {
-            $this->error('Safety backup failed; restore aborted.');
-
-            return false;
-        }
+        $result = $this->call('db:backup', [
+            '--connection' => $this->optionalStringOption('connection'),
+            '--strategy' => $this->optionalStringOption('strategy'),
+        ]);
 
         if ($result !== self::SUCCESS) {
             $this->error('Safety backup failed; restore aborted.');

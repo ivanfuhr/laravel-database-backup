@@ -103,7 +103,10 @@ $path = $strategy->backup($connection, BackupStorage::forConfiguredDisk());
 composer test          # rector dry-run + pint + phpstan + pest
 composer test:unit     # unit/feature (excludes integration group)
 composer test:integration
+composer test:coverage # pest with PCOV/Xdebug; fails below 100%
 ```
+
+CI installs [PCOV](https://github.com/krakjoe/pcov) via `shivammathur/setup-php` and enforces 100% coverage of `src/`. Locally, enable PCOV or Xdebug, then run `composer test:coverage`.
 
 Integration tests use [Testcontainers](https://github.com/testcontainers/testcontainers-php) against a real PostgreSQL 17 container. Docker must be available. Client tools are invoked via wrappers that `docker exec` into the container when local `pg_dump` / `pg_restore` are not installed.
 

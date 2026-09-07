@@ -134,6 +134,6 @@ final readonly class PostgreSqlBackupStrategy implements DatabaseBackupStrategy
             @mkdir($tempDir, 0755, true);
         }
 
-        return $tempDir.DIRECTORY_SEPARATOR.getmypid().'-'.$filename;
+        return $tempDir.DIRECTORY_SEPARATOR.getmypid().'-'.uniqid('', true).'-'.$filename;
     }
 }

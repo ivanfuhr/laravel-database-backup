@@ -34,7 +34,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: dom, mbstring, zip, fileinfo, pdo, pdo_pgsql
-          coverage: none
+          coverage: pcov
 
       - name: Install Composer dependencies
         run: |
@@ -42,5 +42,5 @@ jobs:
           composer require --dev "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
 
-      - name: Run tests
-        run: php ./vendor/bin/pest
+      - name: Run tests with coverage
+        run: composer test:coverage

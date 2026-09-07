@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Laravel\Prompts\ConfirmPrompt;
-use Laravel\Prompts\SelectPrompt;
 
 function ensureTestingDirectoryExists(string $path): void
 {
@@ -168,33 +166,6 @@ function configurePgsqlBackup(?string $pgDump = null, ?string $pgRestore = null)
     ]);
 
     Storage::fake($diskName, ['root' => $diskRoot]);
-}
-
-function withPromptFallbacks(?callable $confirm = null, ?callable $select = null): void
-{
-    ConfirmPrompt::fallbackWhen(true);
-    SelectPrompt::fallbackWhen(true);
-
-    if ($confirm !== null) {
-        ConfirmPrompt::fallbackUsing($confirm);
-    }
-
-    if ($select !== null) {
-        SelectPrompt::fallbackUsing($select);
-    }
-}
-
-function resetPromptFallbacks(): void
-{
-    foreach ([ConfirmPrompt::class, SelectPrompt::class] as $promptClass) {
-        $reflection = new ReflectionClass($promptClass);
-
-        $shouldFallback = $reflection->getProperty('shouldFallback');
-        $shouldFallback->setValue(null, false);
-
-        $fallbacks = $reflection->getProperty('fallbacks');
-        $fallbacks->setValue(null, []);
-    }
 }
 
 /**
